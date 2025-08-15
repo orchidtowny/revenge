@@ -1,0 +1,7 @@
+name: Revenge
+version: '2025.8.1.0'
+main: site.remlit.blueb.revenge.Revenge
+api-version: '1.20'
+load: POSTWORLD
+authors: [ blueb ]
+softdepend: [ Towny, AuraSkills ]
