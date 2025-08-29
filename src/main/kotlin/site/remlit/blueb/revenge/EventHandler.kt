@@ -47,7 +47,7 @@ class EventHandler : Listener {
         val isInTown = if (Revenge.towny != null) !(Revenge.towny!!.isWilderness(killer.location)) else false
 
         // in town, 5% chance of revenge, outside, 40%
-        // if (isInTown) (Random.nextInt(1, 100) <= 5) else (Random.nextInt(1, 100) <= 40)
+        if (isInTown) (Random.nextInt(1, 100) <= 5) else (Random.nextInt(1, 100) <= 40)
         val doRevenge = true
 
         if (!doRevenge) return
@@ -98,7 +98,10 @@ class EventHandler : Listener {
             }
 
             EntityType.DROWNED, EntityType.GUARDIAN, EntityType.ELDER_GUARDIAN -> enactRevenge {
-                killer.remainingAir = killer.remainingAir - (1 + if (auraModifier > 1) Random.nextInt(0, 2) else 0)
+	            val effect = PotionEffect(PotionEffectType.SLOW, tps(2) * (auraModifier * repeatRandom), 1)
+	            val effect2 = PotionEffect(PotionEffectType.SLOW_DIGGING, tps(2) * (auraModifier * repeatRandom), 1)
+                killer.addPotionEffect(effect)
+	            if (auraModifier > 15) killer.addPotionEffect(effect2)
             }
 
             EntityType.WITCH -> enactRevenge {
@@ -125,10 +128,6 @@ class EventHandler : Listener {
                 (potionLocation.world.spawnEntity(potionLocation, EntityType.SPLASH_POTION) as ThrownPotion).apply {
                     this.item = potion
                 }
-            }
-
-            EntityType.EVOKER -> enactRevenge {
-
             }
 
             else -> return
